@@ -14,9 +14,12 @@ class LogService
 
         QString m_textLogFilePath;
         QString m_facesTextLogFilePath;
-        void initTextLog(QString logFilePath);
+        void initErrTextLog(QString logFilePath);
+        void initFaceTextLog(QString logFilePath);
         void pushIpTextMessage(QString message);
         void pushFaceDetectionMessage(QString message, QString camAddr = "");
+        bool isFaceLogActive();
+        bool isErrLogActive();
 
     private:
         LogService() {}
