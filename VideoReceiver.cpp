@@ -46,7 +46,8 @@ void VideoReceiver::basicLoop()
     LogService::getInstance().initFaceTextLog(m_faceLog);
     LogService::getInstance().initErrTextLog(m_ErrLog);
 
-    interact.checkCams();
-    interact.runCameras();
+    VO::Status camStat = interact.checkCams();
+    if (camStat != VO::eNoActiveCameras)
+      interact.runCameras();
   }
 }

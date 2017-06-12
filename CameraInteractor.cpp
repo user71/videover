@@ -4,6 +4,7 @@
 #include "opencv2/opencv.hpp"
 #include <thread>
 #include "LogService.h"
+#include "common.h"
 
 CameraInteractor::CameraInteractor()
 {
@@ -20,7 +21,7 @@ void CameraInteractor::addCamera(Camera cam)
     m_cams.push_back(cam);
 }
 
-void CameraInteractor::checkCams()
+VO::Status CameraInteractor::checkCams()
 {
   #if defined(WIN32)
      QString parameter = "-n 1 -w 1";
@@ -28,6 +29,7 @@ void CameraInteractor::checkCams()
      QString parameter = "-c 1 -w 1";
   #endif
 
+  bool isAnyActive = false;
   std::vector<Camera>::iterator pIt = m_cams.begin();
   for(; pIt != m_cams.end(); ++pIt)
   {
@@ -35,32 +37,24 @@ void CameraInteractor::checkCams()
     if (exitCode == 0)
     {
         (*pIt).setActive(true);
+        isAnyActive = true;
     } else
     {
         (*pIt).setActive(false);
         LogService::getInstance().pushErrTextMessage((*pIt).getIp());
     }
   }
+
+  if (isAnyActive)
+    return VO::eOk;
+  else
+    return VO::eNoActiveCameras;
 }
 
 Camera CameraInteractor::getCameraByIdx(int idx)
 {
   return m_cams.at(idx);
 }
-
-// runCamera and captureCamera SHOULD BE IN VideoReceiver ???
-
-/*void CameraInteractor::runCamera(Camera cam)
-{
-  if(cam.isActive())
-  {
-    std::thread camThread(&CameraInteractor::captureCamera, cam);
-    camThread.join();
-  }else
-  {
-      //error-code or something should be returned
-  }
-}*/
 
 void CameraInteractor::runCameras()
 {
@@ -87,13 +81,17 @@ void CameraInteractor::captureCamera(Camera cam)
 {
   cv::VideoCapture cap(cam.getIp().toStdString());
   if (cap.isOpened()) {
-       while (true) {
-         cv::Mat frame;
-         cap >> frame;
-         cv::resize(frame, frame, cv::Size(640, 480));
-         bool isDetected = FlowAnalyzer::detectFace(frame, cam.getIp().toStdString());
-         if (isDetected)
-           LogService::getInstance().pushFaceDetectionMessage("Face Detected!", cam.getIp());
-      }
+    while (true) {
+    cv::Mat frame;
+    cap >> frame;
+    cv::resize(frame, frame, cv::Size(640, 480));
+    bool isDetected = FlowAnalyzer::detectFace(frame, cam.getIp().toStdString());
+    if (isDetected)
+      LogService::getInstance().pushFaceDetectionMessage("Face Detected!", cam.getIp());
+    }
+
+  }else{
+    LogService::getInstance().pushErrTextMessage("cv::VideoCapture is not opened. Camera addr: " + cam.getIp());
   }
+
 }

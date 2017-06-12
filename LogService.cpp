@@ -5,12 +5,16 @@
 
 void LogService::initErrTextLog(QString logFilePath)
 {
+  this->m_errLogMutex.lock();
   this->m_textLogFilePath = logFilePath;
+  this->m_errLogMutex.unlock();
 }
 
 void LogService::initFaceTextLog(QString logFilePath)
 {
+  this->m_faceLogMutex.lock();
   this->m_facesTextLogFilePath = logFilePath;
+  this->m_faceLogMutex.unlock();
 }
 
 void LogService::pushErrTextMessage(QString message)

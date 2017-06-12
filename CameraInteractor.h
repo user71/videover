@@ -10,7 +10,7 @@ public:
     CameraInteractor();
     CameraVector getCamsArray();
     void addCamera(Camera cam);
-    void checkCams();
+    VO::Status checkCams();
     Camera getCameraByIdx(int idx);
     //static void runCamera(Camera cam);
     void runCameras();
