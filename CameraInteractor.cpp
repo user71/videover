@@ -28,7 +28,6 @@ void CameraInteractor::checkCams()
      QString parameter = "-c 1 -w 1";
   #endif
 
-  //QVector<Camera>::iterator pIt = m_cams.begin();
   std::vector<Camera>::iterator pIt = m_cams.begin();
   for(; pIt != m_cams.end(); ++pIt)
   {
@@ -39,7 +38,7 @@ void CameraInteractor::checkCams()
     } else
     {
         (*pIt).setActive(false);
-        LogService::getInstance().pushIpTextMessage((*pIt).getIp());
+        LogService::getInstance().pushErrTextMessage((*pIt).getIp());
     }
   }
 }
@@ -92,7 +91,9 @@ void CameraInteractor::captureCamera(Camera cam)
          cv::Mat frame;
          cap >> frame;
          cv::resize(frame, frame, cv::Size(640, 480));
-         FlowAnalyzer::detectFace(frame, cam.getIp().toStdString());
+         bool isDetected = FlowAnalyzer::detectFace(frame, cam.getIp().toStdString());
+         if (isDetected)
+           LogService::getInstance().pushFaceDetectionMessage("Face Detected!", cam.getIp());
       }
   }
 }

@@ -2,6 +2,7 @@
 #define LOGSERVICE_H
 
 #include "common.h"
+#include <mutex>
 
 class LogService
 {
@@ -12,11 +13,9 @@ class LogService
             return instance;
         }
 
-        QString m_textLogFilePath;
-        QString m_facesTextLogFilePath;
         void initErrTextLog(QString logFilePath);
         void initFaceTextLog(QString logFilePath);
-        void pushIpTextMessage(QString message);
+        void pushErrTextMessage(QString message);
         void pushFaceDetectionMessage(QString message, QString camAddr = "");
         bool isFaceLogActive();
         bool isErrLogActive();
@@ -25,6 +24,11 @@ class LogService
         LogService() {}
         LogService(LogService const&);
         void operator= (LogService const&);
+
+        QString m_textLogFilePath;
+        QString m_facesTextLogFilePath;
+        std::mutex m_errLogMutex;
+        std::mutex m_faceLogMutex;
 };
 
 #endif // LOGSERVICE_H
