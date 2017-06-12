@@ -19,7 +19,7 @@ private:
     bool m_Active;
 };
 
-typedef QVector<Camera>/*std::vector<Camera>*/ CameraVector;
+typedef std::vector<Camera> CameraVector;
 
 
 #endif // CAMERA_H

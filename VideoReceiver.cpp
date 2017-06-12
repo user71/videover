@@ -17,7 +17,7 @@ void VideoReceiver::up()
   m_drop = false;
 }
 
-void VideoReceiver::initSettings(QVector<QString> addrs)
+void VideoReceiver::initSettings(std::vector<QString> addrs)
 {
     this->m_addrs = addrs;
 }

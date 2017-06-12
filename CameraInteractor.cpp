@@ -28,7 +28,8 @@ void CameraInteractor::checkCams()
      QString parameter = "-c 1 -w 1";
   #endif
 
-  QVector<Camera>::iterator pIt = m_cams.begin();
+  //QVector<Camera>::iterator pIt = m_cams.begin();
+  std::vector<Camera>::iterator pIt = m_cams.begin();
   for(; pIt != m_cams.end(); ++pIt)
   {
     int exitCode = QProcess::execute("ping", QStringList() << (*pIt).getIp() << parameter);
@@ -65,16 +66,15 @@ Camera CameraInteractor::getCameraByIdx(int idx)
 void CameraInteractor::runCameras()
 {
   CameraVector activeCameras;
-  QVector<Camera>::iterator pIt = m_cams.begin();
+  std::vector<Camera>::iterator pIt = m_cams.begin();
   for (; pIt != m_cams.end(); ++pIt)
   {
     if ((*pIt).isActive())
       activeCameras.push_back(*pIt);
   }
 
-  //QVector<std::thread> threadsVar;
   std::vector<std::thread> threadsVar;
-  QVector<Camera>::iterator pIt2 = activeCameras.begin();
+  std::vector<Camera>::iterator pIt2 = activeCameras.begin();
   for (; pIt2 != activeCameras.end(); ++pIt2)
   {
     threadsVar.push_back(std::thread(&CameraInteractor::captureCamera, this, (*pIt)));
