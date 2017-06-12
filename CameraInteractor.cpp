@@ -1,4 +1,5 @@
 #include "CameraInteractor.h"
+#include "FlowAnalyzer.h"
 #include <QProcess>
 #include "opencv2/opencv.hpp"
 #include <thread>
@@ -81,65 +82,17 @@ void CameraInteractor::runCameras()
 
   for (auto& th: threadsVar) th.join();
 
-  /*
-  if(cam.isActive())
-  {
-    std::thread camThread(&CameraInteractor::captureCamera, cam);
-    camThread.join();
-  }else
-  {
-      //error-code or something should be returned
-  }*/
 }
 
-//void CameraInteractor::captureCamera(Camera cam)
 void CameraInteractor::captureCamera(Camera cam)
 {
-/*
-#include <iostream>
-#include <thread>
-#include "opencv2/opencv.hpp"
-#include <vector>
-using namespace std;
-using namespace cv;
-void detect(Mat img, String strCamera) {
-  string cascadeName1 = "haar_cascade_for_people_detection.xml";
-  CascadeClassifier detectorBody;
-  bool loaded1 = detectorBody.load(cascadeName1);
-  Mat original;
-  img.copyTo(original);
-  vector human;
-  cvtColor(img, img, CV_BGR2GRAY);
-  equalizeHist(img, img);
-  detectorBody.detectMultiScale(img, human, 1.1, 2, 0 | 1, Size(40, 80), Size(400,480 ));
-  if (human.size() > 0)
-    {
-      for (int gg = 0; gg < human.size(); gg++)
-      {
-      rectangle(original, human[gg].tl(), human[gg].br(), Scalar(0, 0, 255), 2, 8, 0);
+  cv::VideoCapture cap(cam.getIp().toStdString());
+  if (cap.isOpened()) {
+       while (true) {
+         cv::Mat frame;
+         cap >> frame;
+         cv::resize(frame, frame, cv::Size(640, 480));
+         FlowAnalyzer::detectFace(frame, cam.getIp().toStdString());
       }
-    }
-  imshow("Detect " + strCamera, original);
-  int key6 = waitKey(40);
-//End of the detect
-}
-void stream(String strCamera) {
-VideoCapture cap(strCamera);
- if (cap.isOpened()) {
-      while (true) {
-        Mat frame;
-        cap >> frame;
-        resize(frame, frame, Size(640, 480));
-        detect(frame, strCamera);
-     }
-   }
-}
-int main() {
-    thread cam1(stream, "http://xxxxxxxR");
-    thread cam2(stream, "http://xxxxxxxR");
-    cam1.join();
-    cam2.join();
-    return 0;
-}
- */
+  }
 }
