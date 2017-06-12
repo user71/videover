@@ -12,6 +12,8 @@ int main(int argc, char *argv[])
     vo.updErrLog("errLog.log");
     vo.updFaceLog("faceLog.log");
     vo.initSettings(std::vector<QString>());
+    vo.updCameras();
+    vo.updCamStatus();
     vo.up();
     vo.basicLoop();
 

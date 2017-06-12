@@ -12,11 +12,9 @@ public:
     void addCamera(Camera cam);
     VO::Status checkCams();
     Camera getCameraByIdx(int idx);
-    //static void runCamera(Camera cam);
     void runCameras();
 
 private:
-    //static void captureCamera(Camera cam);
     void captureCamera(Camera cam);
     CameraVector m_cams;
 };

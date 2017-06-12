@@ -25,29 +25,33 @@ void VideoReceiver::initSettings(std::vector<QString> addrs)
 void VideoReceiver::updFaceLog(QString log)
 {
   m_faceLog = log;
+  LogService::getInstance().initFaceTextLog(m_faceLog);
 }
 
 void VideoReceiver::updErrLog(QString log)
 {
   m_ErrLog = log;
+  LogService::getInstance().initErrTextLog(m_ErrLog);
+}
+
+void VideoReceiver::updCameras()
+{
+  for (auto& a: m_addrs)
+  {
+    Camera c(a, false);
+    m_interactor.addCamera(c);
+  }
+}
+
+void VideoReceiver::updCamStatus()
+{
+  m_camStatus = m_interactor.checkCams();
 }
 
 void VideoReceiver::basicLoop()
 {
   while (!m_drop) {
-    CameraInteractor interact;
-
-    for (auto& a: m_addrs)
-    {
-      Camera c(a, false);
-      interact.addCamera(c);
-    }
-
-    LogService::getInstance().initFaceTextLog(m_faceLog);
-    LogService::getInstance().initErrTextLog(m_ErrLog);
-
-    VO::Status camStat = interact.checkCams();
-    if (camStat != VO::eNoActiveCameras)
-      interact.runCameras();
+    if (m_camStatus != VO::eNoActiveCameras)
+      m_interactor.runCameras();
   }
 }
