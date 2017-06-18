@@ -5,6 +5,7 @@
 #include <vector>
 #include <QString>
 #include <QVector>
+#include <memory>
 
 namespace VO{
   enum Status
@@ -15,6 +16,9 @@ namespace VO{
     eErrLogIsNotActive = 3,
     eFaceLogIsNotActive = 4,
     eNoActiveCameras = 5,
+    eCantOpenFileForRead = 6,
+    eCantOpenFileForWrite = 7,
+    eNotCVCode = 8,
   };
 }
 

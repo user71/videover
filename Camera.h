@@ -7,11 +7,12 @@ class Camera
 {
 public:
     Camera();
+    Camera(const Camera& a);
     Camera(QString ip, bool activate);
 
     QString getIp() const;
     void setIp(QString str);
-    bool isActive();
+    bool isActive() const;
     void setActive(bool a);
 
 private:

@@ -1,6 +1,8 @@
 #include "VideoReceiver.h"
 #include "CameraInteractor.h"
 #include "LogService.h"
+#include <QFile>
+#include <QTextStream>
 
 VideoReceiver::VideoReceiver()
 {
@@ -34,13 +36,26 @@ void VideoReceiver::updErrLog(QString log)
   LogService::getInstance().initErrTextLog(m_ErrLog);
 }
 
-void VideoReceiver::updCameras()
+VO::Status VideoReceiver::updCameras(QString pathToCr)
 {
+  QFile file(pathToCr);
+  if(!file.open(QIODevice::ReadOnly)) {
+   return VO::eCantOpenFileForRead;
+  }
+
+  QTextStream input(&file);
+  while(!input.atEnd()) {
+    QString line = input.readLine();
+    m_addrs.push_back(line);
+  }
+
   for (auto& a: m_addrs)
   {
     Camera c(a, false);
     m_interactor.addCamera(c);
   }
+
+  return VO::eOk;
 }
 
 void VideoReceiver::updCamStatus()

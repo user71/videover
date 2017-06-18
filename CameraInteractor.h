@@ -8,7 +8,7 @@ class CameraInteractor
 {
 public:
     CameraInteractor();
-    CameraVector getCamsArray();
+    CameraVector getCamsArray() const;
     void addCamera(Camera cam);
     VO::Status checkCams();
     Camera getCameraByIdx(int idx);
@@ -16,6 +16,7 @@ public:
 
 private:
     void captureCamera(Camera cam);
+    VO::Status isCVEnum(const std::string& str, int& cvCode);
     CameraVector m_cams;
 };
 

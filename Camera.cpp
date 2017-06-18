@@ -6,6 +6,12 @@ Camera::Camera()
     this->m_Active = false;
 }
 
+Camera::Camera(const Camera &a)
+{
+  m_Ip = a.getIp();
+  m_Active = a.isActive();
+}
+
 Camera::Camera(QString ip, bool activate)
 {
   this->m_Ip = ip;
@@ -22,7 +28,7 @@ void Camera::setIp(QString str)
     this->m_Ip = str;
 }
 
-bool Camera::isActive()
+bool Camera::isActive() const
 {
   return this->m_Active;
 }

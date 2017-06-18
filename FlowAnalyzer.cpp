@@ -6,7 +6,7 @@ FlowAnalyzer::FlowAnalyzer()
 
 bool FlowAnalyzer::detectFace(Mat img, String strCamera)
 {
-  string cascadeName1 = "/opt/opencv-2.4.4/data/haarcascades/haarcascade_frontalface_default.xml";
+  string cascadeName1 = "/opt/SurvSys/haarcascade_frontalface_default.xml";
   CascadeClassifier detectorFace;
   bool isCascadeLoaded = detectorFace.load(cascadeName1);
 

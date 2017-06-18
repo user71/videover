@@ -14,7 +14,7 @@ public:
     void updErrLog(QString log);
     void drop();
     void up();
-    void updCameras();
+    VO::Status updCameras(QString pathToCr);
     void updCamStatus();
 private:
     std::vector<QString> m_addrs;

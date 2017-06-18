@@ -23,7 +23,7 @@ void LogService::pushErrTextMessage(QString message)
   if (this->isErrLogActive())
   {
     QFile file(this->m_textLogFilePath);
-    if (file.open(QIODevice::ReadWrite)) {
+    if (file.open(QIODevice::ReadWrite | QIODevice::Append)) {
       QTextStream stream(&file);
       QString dateTime = QDateTime::currentDateTime().toString();
       stream << "[" << dateTime << "] : " << message << endl;
@@ -38,8 +38,8 @@ void LogService::pushFaceDetectionMessage(QString message, QString camAddr)
   this->m_faceLogMutex.lock();
   if (this->isFaceLogActive())
   {
-    QFile file(this->m_textLogFilePath);
-    if (file.open(QIODevice::ReadWrite)) {
+    QFile file(this->m_facesTextLogFilePath);
+    if (file.open(QIODevice::ReadWrite | QIODevice::Append)) {
       QTextStream stream(&file);
       QString dateTime = QDateTime::currentDateTime().toString();
       stream << "[" << dateTime << "] : " << message << " ; Camera address: "<< camAddr << endl;

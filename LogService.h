@@ -27,8 +27,8 @@ class LogService
 
         QString m_textLogFilePath;
         QString m_facesTextLogFilePath;
-        std::mutex m_errLogMutex;
-        std::mutex m_faceLogMutex;
+        mutable std::mutex m_errLogMutex;
+        mutable std::mutex m_faceLogMutex;
 };
 
 #endif // LOGSERVICE_H
