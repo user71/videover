@@ -16,6 +16,7 @@ public:
     void up();
     VO::Status updCameras(QString pathToCr);
     void updCamStatus();
+    void initPath(QString path);
 private:
     std::vector<QString> m_addrs;
     QString m_faceLog;

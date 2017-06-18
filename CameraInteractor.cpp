@@ -9,7 +9,7 @@
 
 CameraInteractor::CameraInteractor()
 {
-    m_cams.clear();
+  m_cams.clear();
 }
 
 CameraVector CameraInteractor::getCamsArray() const
@@ -19,7 +19,7 @@ CameraVector CameraInteractor::getCamsArray() const
 
 void CameraInteractor::addCamera(Camera cam)
 {
-    m_cams.push_back(cam);
+  m_cams.push_back(cam);
 }
 
 VO::Status CameraInteractor::checkCams()
@@ -74,13 +74,16 @@ VO::Status CameraInteractor::checkCams()
 
 
 
-Camera CameraInteractor::getCameraByIdx(int idx)
+Camera CameraInteractor::getCameraByIdx(int idx) const
 {
   return m_cams.at(idx);
 }
 
-void CameraInteractor::runCameras()
+VO::Status CameraInteractor::runCameras()
 {
+  if (m_cams.size() == 0)
+    return VO::Status::eNoCameras;
+
   std::vector<std::thread> threadsVar;
   std::vector<Camera>::iterator pIt = m_cams.begin();
   for (; pIt != m_cams.end(); ++pIt)
@@ -90,27 +93,15 @@ void CameraInteractor::runCameras()
       threadsVar.push_back(std::thread(&CameraInteractor::captureCamera, this, (*pIt)));
     }
   }
-  /*CameraVector activeCameras;
-  std::vector<Camera>::iterator pIt = m_cams.begin();
-  for (; pIt != m_cams.end(); ++pIt)
-  {
-    if ((*pIt).isActive())
-      activeCameras.push_back((*pIt));
-  }
-
-  std::vector<std::thread> threadsVar;
-  std::vector<Camera>::iterator pIt2 = activeCameras.begin();
-  for (; pIt2 != activeCameras.end(); ++pIt2)
-  {
-    //Camera camC((*pIt));
-    Camera camC;
-    camC.setActive(true);
-    camC.setIp((*pIt).getIp());
-    threadsVar.push_back(std::thread(&CameraInteractor::captureCamera, this, camC));
-  }*/
 
   for (auto& th: threadsVar) th.join();
 
+  return VO::Status::eOk;
+}
+
+void CameraInteractor::setPath(QString path)
+{
+  m_path = path;
 }
 
 void CameraInteractor::captureCamera(Camera cam)
@@ -125,11 +116,10 @@ void CameraInteractor::captureCamera(Camera cam)
   if (cap.isOpened())
   {
     QString dateTime = QDateTime::currentDateTime().toString();
-    QString path("/opt/SurvSys/");
+    QString path = m_path;
     path = path + dateTime + ".avi";
-    VideoWriter vWrt (path.toStdString(), CV_FOURCC('P','I','M','1'), 20, cv::Size(640, 480), true);
-    if (vWrt.isOpened())
-        double q = 0.0;
+    VideoWriter vWrt (path.toStdString(), CV_FOURCC('X', 'V', 'I', 'D'), 20, cv::Size(640, 480), true);
+
     while (true)
     {
       cv::Mat frame;
@@ -144,7 +134,6 @@ void CameraInteractor::captureCamera(Camera cam)
   {
     LogService::getInstance().pushErrTextMessage("cv::VideoCapture is not opened. Camera addr: " + cam.getIp());
   }
-
 }
 
 VO::Status CameraInteractor::isCVEnum(const string &str, int &cvCode)

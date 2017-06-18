@@ -9,6 +9,7 @@ class FlowAnalyzer
 {
 public:
     FlowAnalyzer();
+    static string getHaarcascades();
     static bool detectFace(Mat img, String strCamera);
 };
 

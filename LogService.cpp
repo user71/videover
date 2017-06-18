@@ -17,7 +17,7 @@ void LogService::initFaceTextLog(QString logFilePath)
   this->m_faceLogMutex.unlock();
 }
 
-void LogService::pushErrTextMessage(QString message)
+void LogService::pushErrTextMessage(QString message) const
 {
   this->m_errLogMutex.lock();
   if (this->isErrLogActive())
@@ -33,7 +33,7 @@ void LogService::pushErrTextMessage(QString message)
   this->m_errLogMutex.unlock();
 }
 
-void LogService::pushFaceDetectionMessage(QString message, QString camAddr)
+void LogService::pushFaceDetectionMessage(QString message, QString camAddr) const
 {
   this->m_faceLogMutex.lock();
   if (this->isFaceLogActive())
@@ -49,12 +49,12 @@ void LogService::pushFaceDetectionMessage(QString message, QString camAddr)
   this->m_faceLogMutex.unlock();
 }
 
-bool LogService::isFaceLogActive()
+bool LogService::isFaceLogActive() const
 {
   return !this->m_facesTextLogFilePath.isEmpty();
 }
 
-bool LogService::isErrLogActive()
+bool LogService::isErrLogActive() const
 {
   return !this->m_textLogFilePath.isEmpty();
 }

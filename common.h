@@ -19,9 +19,9 @@ namespace VO{
     eCantOpenFileForRead = 6,
     eCantOpenFileForWrite = 7,
     eNotCVCode = 8,
+    eNoCameras = 9,
   };
 }
 
-//typedef /*std::string*/QString String;
 
 #endif // COMMON_H

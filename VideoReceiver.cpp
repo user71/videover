@@ -60,7 +60,12 @@ VO::Status VideoReceiver::updCameras(QString pathToCr)
 
 void VideoReceiver::updCamStatus()
 {
-  m_camStatus = m_interactor.checkCams();
+    m_camStatus = m_interactor.checkCams();
+}
+
+void VideoReceiver::initPath(QString path)
+{
+  m_interactor.setPath(path);
 }
 
 void VideoReceiver::basicLoop()

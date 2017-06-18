@@ -15,10 +15,10 @@ class LogService
 
         void initErrTextLog(QString logFilePath);
         void initFaceTextLog(QString logFilePath);
-        void pushErrTextMessage(QString message);
-        void pushFaceDetectionMessage(QString message, QString camAddr = "");
-        bool isFaceLogActive();
-        bool isErrLogActive();
+        void pushErrTextMessage(QString message) const;
+        void pushFaceDetectionMessage(QString message, QString camAddr = "") const;
+        bool isFaceLogActive() const;
+        bool isErrLogActive() const;
 
     private:
         LogService() {}
